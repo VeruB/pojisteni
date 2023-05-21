@@ -1,0 +1,120 @@
+class Pojisteni:
+    def __init__(self, jmeno, prijmeni, vek, telefon):
+        self.jmeno = jmeno
+        self.prijmeni = prijmeni
+        self.vek = vek
+        self.telefon = telefon
+
+    def __str__(self):
+        return f"{self.jmeno} {self.prijmeni}, věk: {self.vek} let, telefonní číslo: {self.telefon}"
+
+class SeznamPojisteni:
+    def __init__(self):
+        self.pojisteni = []
+
+    def pridej_pojisteneho(self, pojisteny):
+        self.pojisteni.append(pojisteny)
+
+    def vypis_seznam(self):
+        for pojisteny in self.pojisteni:
+            print(pojisteny)
+
+    def vyhledat_pojisteneho(self, jmeno, prijmeni):
+        for pojisteny in self.pojisteni:
+            if pojisteny.jmeno == jmeno and pojisteny.prijmeni == prijmeni:
+                return pojisteny
+
+        return None
+
+
+class NegativeAgeError(Exception):
+    pass
+
+
+class Pojisteni:
+    def __init__(self, jmeno, prijmeni, vek, telefon):
+        self.jmeno = jmeno
+        self.prijmeni = prijmeni
+        self.vek = vek
+        self.telefon = telefon
+
+    def __str__(self):
+        return f"{self.jmeno} {self.prijmeni}, věk: {self.vek}, telefonní číslo: {self.telefon}"
+
+
+class SeznamPojistenych:
+    def __init__(self):
+        self.seznam = []
+
+    def pridej_pojisteneho(self, pojisteny):
+        self.seznam.append(pojisteny)
+
+    def vypis_seznam(self):
+        if len(self.seznam) == 0:
+            print("Prosím zadejte pojištěné.")
+        else:
+            for pojisteny in self.seznam:
+                print(pojisteny)
+
+    def vyhledat_pojisteneho(self, jmeno, prijmeni):
+        for pojisteny in self.seznam:
+            if pojisteny.jmeno == jmeno and pojisteny.prijmeni == prijmeni:
+                return pojisteny
+        return None
+
+
+def main():
+    seznam_pojisteni = SeznamPojistenych()
+
+    while True:
+        print("1. Přidání nového pojištěného.")
+        print("2. Seznam všech pojištěných.")
+        print("3. Vyhledání pojištěného.")
+        print("4. Ukončení programu.")
+        volba = int(input("Vyberte číslo akce: "))
+
+        if volba == 1:
+            jmeno = input("Zadejte jméno: ")
+            prijmeni = input("Zadejte příjmení: ")
+            while True:
+                try:
+                    vek = int(input("Zadejte věk: "))
+                    if vek < 0:
+                        raise NegativeAgeError("Nelze uložit!")
+                    break
+                except ValueError:
+                    print("Nelze uložit! Chyba!")
+                except NegativeAgeError as e:
+                    print(e)
+
+            telefon = input("Zadejte telefonní číslo: ")
+            while not telefon.isdigit():
+                print("Chybný tvar telefonního čísla!")
+                telefon = input("Zadejte telefonní číslo: ")
+
+            pojisteny = Pojisteni(jmeno, prijmeni, vek, telefon)
+            seznam_pojisteni.pridej_pojisteneho(pojisteny)
+
+        elif volba == 2:
+            seznam_pojisteni.vypis_seznam()
+
+        elif volba == 3:
+            jmeno = input("Zadejte jméno: ")
+            prijmeni = input("Zadejte příjmení: ")
+
+            pojisteny = seznam_pojisteni.vyhledat_pojisteneho(jmeno, prijmeni)
+
+            if pojisteny is not None:
+
+                print(pojisteny)
+            else:
+                print("Tento pojištěný v databázi neexistuje!")
+
+        elif volba == 4:
+            print("Ukončuji program,\nděkuji za použití a přeji hezký den.")
+            break
+
+
+if __name__ == '__main__':
+    main()
+
